@@ -1,0 +1,20 @@
+[package]
+name = "year-2024"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+shared = { workspace = true }
+regex = { workspace = true }
+
+[[bin]]
+name = "year-2024_day-1"
+path = "src/bin/day-1.rs"
+
+[[bin]]
+name = "year-2024_day-2"
+path = "src/bin/day-2.rs"
+
+[[bin]]
+name = "year-2024_day-3"
+path = "src/bin/day-3.rs"

@@ -1,0 +1,7 @@
+[workspace]
+members = ["shared", "template", "year-2024"]
+resolver = "2"
+
+[workspace.dependencies]
+shared = { path = "shared" }
+regex = "1.11"
