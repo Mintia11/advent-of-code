@@ -1,11 +1,11 @@
 #![allow(unused_attributes)]
 #![feature(let_chains)]
 
-use std::collections::BTreeSet;
+use hashbrown::HashSet;
 
 use shared::{two_dimensional_find, two_dimensional_get};
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 enum Direction {
     Top,
     Bottom,
@@ -73,8 +73,8 @@ fn visited_positions(
     map: &[Vec<MapEntry>],
     mut guard: (usize, usize),
     mut direction: Direction,
-) -> BTreeSet<(usize, usize)> {
-    let mut positions: BTreeSet<(usize, usize)> = BTreeSet::new();
+) -> HashSet<(usize, usize)> {
+    let mut positions: HashSet<(usize, usize)> = HashSet::default();
     positions.insert(guard);
 
     while let action = walk(&map, &mut guard, &mut direction)
@@ -93,7 +93,7 @@ fn visited_positions(
 }
 
 fn is_looping(map: &[Vec<MapEntry>], mut guard: (usize, usize), mut direction: Direction) -> bool {
-    let mut positions: BTreeSet<((usize, usize), Direction)> = BTreeSet::new();
+    let mut positions: HashSet<((usize, usize), Direction)> = HashSet::default();
 
     while let action = walk(&map, &mut guard, &mut direction)
         && matches!(action, Action::Continue | Action::Obstacle)
@@ -145,7 +145,7 @@ fn main() {
         positions.len()
     });
 
-    shared::solution_fn(2, &inputs, 6, |input| {
+    shared::solution_fn(2, &inputs, 6, |mut input| {
         let mut loops = 0;
 
         let guard =
@@ -154,16 +154,18 @@ fn main() {
         let visited_positions = visited_positions(&input, guard, Direction::Top);
 
         for (x, y) in visited_positions {
-            let mut clone = input.clone();
-            if let MapEntry::Guard(_) = clone[y][x] {
+            let mut old_entry = MapEntry::Obstacle;
+            if let MapEntry::Guard(_) = input[y][x] {
                 continue;
             }
 
-            clone[y][x] = MapEntry::Obstacle;
+            std::mem::swap(&mut input[y][x], &mut old_entry);
 
-            if is_looping(&clone, guard, Direction::Top) {
+            if is_looping(&input, guard, Direction::Top) {
                 loops += 1;
             }
+
+            input[y][x] = old_entry;
         }
 
         loops

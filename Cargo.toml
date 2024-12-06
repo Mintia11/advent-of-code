@@ -3,6 +3,7 @@ members = ["shared", "template", "year-2024"]
 resolver = "2"
 
 [workspace.dependencies]
+hashbrown = "0.15"
 shared = { path = "shared" }
 regex = { version = "1.11", default-features = true, features = [
     "std",
