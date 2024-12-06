@@ -50,6 +50,7 @@ fn year_bin_name() -> (String, String) {
     }
 }
 
+#[must_use]
 pub fn parse_input<T, F>(func: F) -> Input<T>
 where
     F: Fn(&str) -> T,
@@ -72,6 +73,7 @@ where
     }
 }
 
+#[must_use]
 pub fn read_input<T: InputType>(part: Option<usize>) -> String {
     let (year, bin_name) = year_bin_name();
     let path = if let Some(part) = part {
@@ -89,8 +91,8 @@ pub fn has_two_parts<T: InputType>() -> bool {
     let part1 = format!("{}/{}/{}-part1.txt", year, T::path(), bin_name);
     let part2 = format!("{}/{}/{}-part2.txt", year, T::path(), bin_name);
 
-    match (fs::exists(&part1), fs::exists(&part2)) {
-        (Ok(true), Ok(true)) => true,
-        _ => false,
-    }
+    matches!(
+        (fs::exists(&part1), fs::exists(&part2)),
+        (Ok(true), Ok(true))
+    )
 }

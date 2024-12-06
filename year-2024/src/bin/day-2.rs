@@ -39,21 +39,20 @@ fn main() {
         input
             .iter()
             .map(|line| is_safe(line.as_slice()))
-            .map(|b| b as usize)
+            .map(usize::from)
             .sum()
     });
 
     shared::solution_fn(2, &inputs, 4, |input| {
         input
             .iter()
-            .map(|line| {
+            .filter_map(|line| {
                 (0..line.len())
                     .map(|i| concat(&line[..i], &line[i + 1..]))
                     .map(|subset| is_safe(&subset))
-                    .find(|&i| i == true)
+                    .find(|&i| i)
             })
-            .flatten()
-            .map(|a| a as usize)
+            .map(usize::from)
             .sum()
     });
 }

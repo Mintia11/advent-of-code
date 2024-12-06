@@ -13,8 +13,8 @@ fn main() {
             lines[1].push(uint(second));
         }
 
-        lines[0].sort();
-        lines[1].sort();
+        lines[0].sort_unstable();
+        lines[1].sort_unstable();
 
         lines
     });
@@ -30,7 +30,7 @@ fn main() {
             .map(|i| {
                 (0..lines[1].len())
                     .map(|j| lines[0][i] == lines[1][j])
-                    .map(|r| r as usize)
+                    .map(usize::from)
                     .sum::<usize>()
                     * lines[0][i]
             })

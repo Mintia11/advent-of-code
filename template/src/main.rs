@@ -35,37 +35,33 @@ fn main() {
     let year = &args[1];
     let day = &args[2];
 
-    let path = format!("{}/src/bin/day-{}.rs", year, day);
+    let path = format!("{year}/src/bin/day-{day}.rs");
     std::fs::write(path, TEMPLATE).unwrap();
 
     let cargo_toml_template = CARGO_TOML_TEMPLATE
-        .replace("*YEAR*", &year)
-        .replace("*DAY*", &day);
+        .replace("*YEAR*", year)
+        .replace("*DAY*", day);
 
-    let cargo_toml_path = format!("{}/Cargo.toml", year);
+    let cargo_toml_path = format!("{year}/Cargo.toml");
     let mut cargo_toml = std::fs::read_to_string(&cargo_toml_path).unwrap();
-    cargo_toml.extend(cargo_toml_template.chars());
+    cargo_toml.push_str(&cargo_toml_template);
     std::fs::write(cargo_toml_path, cargo_toml).unwrap();
 
-    let main_rs_template = MAIN_RS_TEMPLATE.replace("*DAY*", &day);
+    let main_rs_template = MAIN_RS_TEMPLATE.replace("*DAY*", day);
 
-    let main_rs_path = format!("{}/src/main.rs", year);
+    let main_rs_path = format!("{year}/src/main.rs");
     let mut main_rs = std::fs::read_to_string(&main_rs_path).unwrap();
-    main_rs.extend(main_rs_template.chars());
-    let mut lines = main_rs.lines().map(|s| s.to_string()).collect::<Vec<_>>();
+    main_rs.push_str(&main_rs_template);
+    let mut lines = main_rs.lines().map(ToString::to_string).collect::<Vec<_>>();
     for line in &mut lines {
         if line.contains("const DAYS: &[fn()]") {
             line.remove(line.len() - 2);
             line.remove(line.len() - 1);
-            line.push_str(&format!(", day_{}::run];", day));
+            line.push_str(&format!(", day_{day}::run];"));
         }
 
         line.push('\n');
     }
-    let main_rs = lines
-        .iter()
-        .map(|c| c.chars())
-        .flatten()
-        .collect::<String>();
+    let main_rs = lines.iter().flat_map(|c| c.chars()).collect::<String>();
     std::fs::write(main_rs_path, main_rs).unwrap();
 }

@@ -28,14 +28,12 @@ fn main() {
 
         let does = do_regex
             .captures_iter(&input)
-            .map(|cap| cap.get(0).map(|c| c.start()))
-            .flatten()
+            .filter_map(|cap| cap.get(0).map(|c| c.start()))
             .collect::<Vec<_>>();
 
         let donts = dont_regex
             .captures_iter(&input)
-            .map(|cap| cap.get(0).map(|c| c.start()))
-            .flatten()
+            .filter_map(|cap| cap.get(0).map(|c| c.start()))
             .collect::<Vec<_>>();
 
         let muls = mul_regex

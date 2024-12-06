@@ -1,6 +1,8 @@
 #![feature(os_str_display)]
 #![feature(path_file_prefix)]
 #![feature(let_chains)]
+#![feature(slice_index_methods)]
+#![feature(const_for)]
 
 use std::{fmt::Debug, time::Duration};
 
@@ -93,8 +95,13 @@ where
 {
     let mut out = Vec::with_capacity(a.len() + b.len());
 
-    out.extend_from_slice(&a);
-    out.extend_from_slice(&b);
+    out.extend_from_slice(a);
+    out.extend_from_slice(b);
 
     out
+}
+
+#[must_use]
+pub fn is_crlf(s: &str) -> bool {
+    s.contains("\r\n")
 }

@@ -4,4 +4,7 @@ resolver = "2"
 
 [workspace.dependencies]
 shared = { path = "shared" }
-regex = "1.11"
+regex = { version = "1.11", default-features = true, features = [
+    "std",
+    "perf",
+] }

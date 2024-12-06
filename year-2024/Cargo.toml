@@ -18,3 +18,15 @@ path = "src/bin/day-2.rs"
 [[bin]]
 name = "year-2024_day-3"
 path = "src/bin/day-3.rs"
+
+[[bin]]
+name = "year-2024_day-4"
+path = "src/bin/day-4.rs"
+
+[[bin]]
+name = "year-2024_day-5"
+path = "src/bin/day-5.rs"
+
+[[bin]]
+name = "year-2024_day-6"
+path = "src/bin/day-6.rs"
