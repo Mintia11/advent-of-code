@@ -7,6 +7,7 @@
 use std::{fmt::Debug, time::Duration};
 
 pub use input::*;
+use internal::{CollectedData, COLLECTED_DATA};
 pub use math::*;
 
 pub mod input;
@@ -22,6 +23,12 @@ macro_rules! runner {
             main()
         }
     };
+
+    ($days:ident) => {
+        fn main() {
+            $crate::internal::main_runner($days)
+        }
+    };
 }
 
 pub fn solution_fn<T, F, R>(part: usize, inputs: &Input<T>, sample_solution: R, solve: F)
@@ -33,50 +40,37 @@ where
     let inputs = inputs.clone();
 
     internal::running_sample();
-    if let Some(part2) = inputs.sample_part2
-        && part == 2
-    {
-        let sample = solve(part2);
-        if sample != sample_solution {
-            panic!(
-                r#"Didn't solve using the sample input
+    let part_data = match (part, inputs.sample_part2) {
+        (1, _) => inputs.sample_part1,
+        (2, None) => inputs.sample_part1,
+        (2, Some(i)) => i,
+        _ => unreachable!(),
+    };
+
+    let sample = solve(part_data);
+    if sample != sample_solution {
+        panic!(
+            r#"Didn't solve using the sample input
  - Expected {sample_solution:?}
  - Found {sample:?}"#
-            );
-        }
-    } else {
-        let sample = solve(inputs.sample_part1);
-        if sample != sample_solution {
-            panic!(
-                r#"Didn't solve using the sample input
- - Expected {sample_solution:?}
- - Found {sample:?}"#
-            );
-        }
+        );
     }
 
     internal::running_real();
     let (res, dur) = timed_fn(|| solve(inputs.real));
 
-    println!(
-        "{}Part {} took {:?}",
-        if internal::is_running_as_single() {
-            "  "
-        } else {
-            ""
-        },
-        part,
-        dur
-    );
-    println!(
-        "{} - Result: {:?}",
-        if internal::is_running_as_single() {
-            "  "
-        } else {
-            ""
-        },
-        res
-    );
+    let time_fn = if part == 1 {
+        CollectedData::set_part1_time
+    } else {
+        CollectedData::set_part2_time
+    };
+
+    time_fn(&COLLECTED_DATA, dur.as_secs_f64());
+
+    if !internal::is_running_as_single() {
+        println!("Part {} took {:?}", part, dur);
+        println!("- Result: {:?}", res);
+    }
 }
 
 pub fn timed_fn<T, F>(f: F) -> (T, Duration)

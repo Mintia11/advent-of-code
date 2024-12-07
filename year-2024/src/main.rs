@@ -1,8 +1,6 @@
 #![feature(let_chains)]
 
-fn main() {
-    DAYS.iter().for_each(|f| f());
-}
+shared::runner!(DAYS);
 
 #[rustfmt::skip]
 const DAYS: &[fn()] = &[day_1::run, day_2::run, day_3::run, day_4::run, day_5::run, day_6::run, day_7::run];

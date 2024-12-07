@@ -4,3 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+indicatif = { version = "0.17", optional = true }
+tabled = { version = "0.17", optional = true }
+
+[features]
+default = []
+runner = ["indicatif", "tabled"]

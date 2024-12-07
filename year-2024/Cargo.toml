@@ -5,8 +5,11 @@ edition = "2021"
 
 [dependencies]
 hashbrown = { workspace = true }
-shared = { workspace = true }
+shared = { workspace = true, features = ["runner"] }
 regex = { workspace = true }
+
+[dev-dependencies]
+shared = { workspace = true }
 
 [[bin]]
 name = "year-2024_day-1"

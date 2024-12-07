@@ -1,6 +1,9 @@
 use std::{env, fs};
 
-use crate::internal::{current_day, is_running_as_single};
+use crate::{
+    internal::{current_day, is_running_as_single, COLLECTED_DATA},
+    timed_fn,
+};
 
 pub trait InputType {
     fn path() -> &'static str;
@@ -29,7 +32,7 @@ pub struct Input<T> {
     pub(crate) real: T,
 }
 
-fn year_bin_name() -> (String, String) {
+pub(crate) fn year_bin_name() -> (String, String) {
     if is_running_as_single() {
         let exe = env::current_exe().unwrap();
         let file_name = exe.file_prefix().unwrap();
@@ -64,7 +67,9 @@ where
 
     let sample = func(&sample_input);
     let sample_part2 = sample_input_part2.map(|i| func(&i));
-    let real = func(&input);
+    let (real, dur) = timed_fn(|| func(&input));
+
+    COLLECTED_DATA.set_parse_time(dur.as_secs_f64());
 
     Input {
         sample_part1: sample,
