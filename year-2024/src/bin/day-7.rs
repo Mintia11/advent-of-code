@@ -6,48 +6,26 @@ pub struct Input {
     args: Vec<usize>,
 }
 
-#[derive(Debug, Clone)]
-enum Operator {
-    Add,
-    Multiply,
-    Concat,
+fn concat(lhs: usize, rhs: usize) -> usize {
+    lhs * 10usize.pow(((rhs as f64).log10().floor() + 1.) as u32) + rhs
 }
 
-impl Operator {
-    pub fn execute(&self, lhs: usize, rhs: usize) -> usize {
-        match self {
-            Self::Add => lhs + rhs,
-            Self::Multiply => lhs * rhs,
-            Self::Concat => lhs * 10usize.pow(((rhs as f64).log10().floor() + 1.) as u32) + rhs,
-        }
+fn resolvable<const CONCAT: bool>(result: usize, current: usize, rest: &[usize]) -> bool {
+    if current > result {
+        return false;
     }
 
-    pub fn permutations<const CONCAT: bool>(n: usize) -> Vec<Vec<Self>> {
-        if n == 0 {
-            return vec![vec![]];
+    let Some(&next) = rest.get(0) else {
+        return result == current;
+    };
+
+    resolvable::<CONCAT>(result, current + next, &rest[1..])
+        || resolvable::<CONCAT>(result, current * next, &rest[1..])
+        || if CONCAT {
+            resolvable::<CONCAT>(result, concat(current, next), &rest[1..])
+        } else {
+            false
         }
-
-        let smaller_permutations = Self::permutations::<CONCAT>(n - 1);
-        let mut result = Vec::new();
-
-        for perm in smaller_permutations {
-            let mut with_add = perm.clone();
-            with_add.push(Self::Add);
-            result.push(with_add);
-
-            let mut with_multiply = perm.clone();
-            with_multiply.push(Self::Multiply);
-            result.push(with_multiply);
-
-            if CONCAT {
-                let mut with_concat = perm.clone();
-                with_concat.push(Self::Concat);
-                result.push(with_concat);
-            }
-        }
-
-        result
-    }
 }
 
 fn main() {
@@ -71,25 +49,11 @@ fn main() {
     shared::solution_fn(1, &inputs, 3749, |input| {
         let mut sum = 0;
 
-        'next_line: for line in input {
+        for line in input {
             let Input { result, args } = line;
 
-            let operators = Operator::permutations::<false>(args.len() - 1);
-            'next_op: for line in operators {
-                let mut calc_result = args[0];
-
-                for (i, operator) in line.iter().enumerate() {
-                    calc_result = operator.execute(calc_result, args[i + 1]);
-                }
-
-                if result == calc_result {
-                    sum += result;
-                    continue 'next_line;
-                }
-
-                if calc_result > result {
-                    continue 'next_op;
-                }
+            if resolvable::<false>(result, args[0], &args[1..]) {
+                sum += result
             }
         }
 
@@ -99,25 +63,11 @@ fn main() {
     shared::solution_fn(2, &inputs, 11387, |input| {
         let mut sum = 0;
 
-        'next_line: for line in input {
+        for line in input {
             let Input { result, args } = line;
 
-            let operators = Operator::permutations::<true>(args.len() - 1);
-            'next_op: for line in operators {
-                let mut calc_result = args[0];
-
-                for (i, operator) in line.iter().enumerate() {
-                    calc_result = operator.execute(calc_result, args[i + 1]);
-                }
-
-                if result == calc_result {
-                    sum += result;
-                    continue 'next_line;
-                }
-
-                if calc_result > result {
-                    continue 'next_op;
-                }
+            if resolvable::<true>(result, args[0], &args[1..]) {
+                sum += result
             }
         }
 
