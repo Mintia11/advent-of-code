@@ -18,7 +18,7 @@ impl Operator {
         match self {
             Self::Add => lhs + rhs,
             Self::Multiply => lhs * rhs,
-            Self::Concat => lhs * 10usize.pow((rhs as f64).log10().floor().add(1.0) as u32) + rhs,
+            Self::Concat => lhs * 10usize.pow(((rhs as f64).log10().floor() + 1.) as u32) + rhs,
         }
     }
 
