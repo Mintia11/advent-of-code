@@ -26,4 +26,4 @@ jobs:
       - name: Build
         run: cargo build --release --all-targets
       - name: Run all the days for year 2024
-        run: cargo run --bin year-2024
+        run: cargo run --bin year-2024 --release
