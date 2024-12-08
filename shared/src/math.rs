@@ -1,11 +1,13 @@
+use crate::num_traits::Num;
+
 #[must_use]
 pub fn uint<T: AsRef<str>>(s: T) -> usize {
     s.as_ref().parse().unwrap()
 }
 
 #[must_use]
-pub fn dist(a: usize, b: usize) -> usize {
-    ((a as isize) - (b as isize)).unsigned_abs()
+pub fn dist<T: Num>(a: T, b: T) -> T::Unsigned {
+    a.abs_sub(&b)
 }
 
 pub fn two_dimensional_get<T, U>(array: &[T], x: usize, y: usize) -> Option<U>

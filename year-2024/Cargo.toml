@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 hashbrown = { workspace = true }
+itertools = { workspace = true }
 shared = { workspace = true, features = ["runner"] }
 regex = { workspace = true }
 
@@ -38,3 +39,7 @@ path = "src/bin/day-6.rs"
 [[bin]]
 name = "year-2024_day-7"
 path = "src/bin/day-7.rs"
+
+[[bin]]
+name = "year-2024_day-8"
+path = "src/bin/day-8.rs"

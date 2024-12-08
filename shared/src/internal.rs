@@ -154,7 +154,7 @@ pub fn main_runner(days: &'static [fn()]) {
     let table = table
         .with(Style::modern())
         .with(Color::BOLD)
-        .modify(Rows::single(0), ColumnSpan::max())
+        .modify(Rows::single(0), ColumnSpan::new(5))
         .modify(Cell::new(0, 0), Alignment::center())
         .modify(Cell::new(1, 0), RowSpan::new(2))
         .modify(Cell::new(1, 0), Alignment::center_vertical())
