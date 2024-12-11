@@ -6,6 +6,11 @@ pub fn uint<T: AsRef<str>>(s: T) -> usize {
 }
 
 #[must_use]
+pub fn uint_char(c: char) -> usize {
+    (c as u8 - b'0').into()
+}
+
+#[must_use]
 pub fn dist<T: Num>(a: T, b: T) -> T::Unsigned {
     a.abs_sub(&b)
 }
