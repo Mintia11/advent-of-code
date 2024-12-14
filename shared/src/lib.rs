@@ -70,7 +70,7 @@ where
 
     if !internal::is_running_as_single() {
         println!("Part {} took {:?}", part, dur);
-        println!("- Result: {:?}", res);
+        println!(" - Result: {:?}", res);
     }
 }
 

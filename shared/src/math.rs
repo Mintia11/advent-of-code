@@ -11,6 +11,11 @@ pub fn uint_char(c: char) -> usize {
 }
 
 #[must_use]
+pub fn int<T: AsRef<str>>(s: T) -> isize {
+    s.as_ref().parse().unwrap()
+}
+
+#[must_use]
 pub fn dist<T: Num>(a: T, b: T) -> T::Unsigned {
     a.abs_sub(&b)
 }

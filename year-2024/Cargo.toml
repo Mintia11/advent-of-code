@@ -8,6 +8,7 @@ hashbrown = { workspace = true }
 itertools = { workspace = true }
 shared = { workspace = true, features = ["runner"] }
 regex = { workspace = true }
+nalgebra = { workspace = true }
 
 [dev-dependencies]
 shared = { workspace = true }
@@ -55,3 +56,15 @@ path = "src/bin/day-10.rs"
 [[bin]]
 name = "year-2024_day-11"
 path = "src/bin/day-11.rs"
+
+[[bin]]
+name = "year-2024_day-12"
+path = "src/bin/day-12.rs"
+
+[[bin]]
+name = "year-2024_day-13"
+path = "src/bin/day-13.rs"
+
+[[bin]]
+name = "year-2024_day-14"
+path = "src/bin/day-14.rs"

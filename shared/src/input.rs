@@ -71,6 +71,10 @@ where
 
     COLLECTED_DATA.set_parse_time(dur.as_secs_f64());
 
+    if !is_running_as_single() {
+        println!("Parsing took {:?}", dur);
+    }
+
     Input {
         sample_part1: sample,
         sample_part2,

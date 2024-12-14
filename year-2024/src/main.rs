@@ -3,7 +3,7 @@
 shared::runner!(DAYS);
 
 #[rustfmt::skip]
-const DAYS: &[fn()] = &[day_1::run, day_2::run, day_3::run, day_4::run, day_5::run, day_6::run, day_7::run, day_8::run, day_9::run, day_10::run, day_11::run];
+const DAYS: &[fn()] = &[day_1::run, day_2::run, day_3::run, day_4::run, day_5::run, day_6::run, day_7::run, day_8::run, day_9::run, day_10::run, day_11::run, day_12::run, day_13::run, day_14::run];
 
 #[path = "bin/day-1.rs"]
 mod day_1;
@@ -37,3 +37,12 @@ mod day_10;
 
 #[path = "bin/day-11.rs"]
 mod day_11;
+
+#[path = "bin/day-12.rs"]
+mod day_12;
+
+#[path = "bin/day-13.rs"]
+mod day_13;
+
+#[path = "bin/day-14.rs"]
+mod day_14;
