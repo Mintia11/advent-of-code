@@ -1,6 +1,14 @@
 #![feature(exit_status_error)]
 
-use std::{env, process::Command};
+use std::{env, process::Command, sync::Arc};
+
+use regex::Regex;
+use reqwest::{
+    blocking::Client,
+    cookie::Jar,
+    header::{ACCEPT, COOKIE, REFERER, USER_AGENT},
+    Url,
+};
 
 const TEMPLATE: &str = r#"
 fn main() {
@@ -45,6 +53,8 @@ const DAYS: &[fn()] = &[];
 "#;
 
 fn main() {
+    dotenvy::dotenv().unwrap();
+
     let args = env::args().collect::<Vec<_>>();
 
     let year = &args[1];
@@ -89,6 +99,87 @@ fn day_template(year: &str, day: &str) {
     }
     let main_rs = lines.iter().flat_map(|c| c.chars()).collect::<String>();
     std::fs::write(main_rs_path, main_rs).unwrap();
+
+    println!("Downloading input and test-input for {}/{}", year, day);
+
+    let session = env::var("session").expect("No session in dotenv");
+
+    let cookies = Jar::default();
+    cookies.add_cookie_str(
+        &format!("session={session}"),
+        &"https://adventofcode.com/".parse::<Url>().unwrap(),
+    );
+    let client = Client::builder()
+        .cookie_provider(Arc::new(cookies))
+        .build()
+        .unwrap();
+
+    let index = client
+        .get(format!(
+            "https://adventofcode.com/{}/day/{}",
+            year.strip_prefix("year-").unwrap(),
+            day,
+        ))
+        .header(ACCEPT, "text/html")
+        .header(
+            REFERER,
+            format!(
+                "https://adventofcode.com/{}",
+                year.strip_prefix("year-").unwrap(),
+            ),
+        )
+        .header(
+            USER_AGENT,
+            r"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+        )
+        .build()
+        .unwrap();
+
+    let index = client.execute(index).unwrap();
+
+    let index = index.bytes().unwrap();
+    let index = std::str::from_utf8(&index).unwrap();
+
+    let code_regex = Regex::new(r"<code>(.*?)<\/code>").unwrap();
+    let codes = code_regex
+        .captures_iter(index)
+        .map(|c| c[1].to_string())
+        .collect::<Vec<_>>();
+
+    if (codes.len() - 1) > 1 {
+        println!("Found more than one code entry, using the last one");
+    }
+
+    let code = codes[codes.len() - 2].as_str();
+    std::fs::write(format!("{year}/test-input/day-{day}.txt"), code).unwrap();
+
+    let input = client
+        .get(format!(
+            "https://adventofcode.com/{}/day/{}/input",
+            year.strip_prefix("year-").unwrap(),
+            day,
+        ))
+        .header(ACCEPT, "text/html")
+        .header(
+            REFERER,
+            format!(
+                "https://adventofcode.com/{}",
+                year.strip_prefix("year-").unwrap(),
+            ),
+        )
+        .header(
+            USER_AGENT,
+            r"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0",
+        )
+        .build()
+        .unwrap();
+
+    let input = client.execute(input).unwrap();
+
+    let input = input.bytes().unwrap();
+    let input = std::str::from_utf8(&input).unwrap();
+
+    std::fs::write(format!("{year}/input/day-{day}.txt"), input.trim()).unwrap();
 }
 
 fn year_template(year: &str) {

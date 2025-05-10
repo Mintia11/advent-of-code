@@ -9,6 +9,7 @@ itertools = { workspace = true }
 shared = { workspace = true, features = ["runner"] }
 regex = { workspace = true }
 nalgebra = { workspace = true }
+pathfinding = { workspace = true }
 
 [dev-dependencies]
 shared = { workspace = true }
@@ -68,3 +69,47 @@ path = "src/bin/day-13.rs"
 [[bin]]
 name = "year-2024_day-14"
 path = "src/bin/day-14.rs"
+
+[[bin]]
+name = "year-2024_day-15"
+path = "src/bin/day-15.rs"
+
+[[bin]]
+name = "year-2024_day-16"
+path = "src/bin/day-16.rs"
+
+[[bin]]
+name = "year-2024_day-17"
+path = "src/bin/day-17.rs"
+
+[[bin]]
+name = "year-2024_day-18"
+path = "src/bin/day-18.rs"
+
+[[bin]]
+name = "year-2024_day-19"
+path = "src/bin/day-19.rs"
+
+[[bin]]
+name = "year-2024_day-20"
+path = "src/bin/day-20.rs"
+
+[[bin]]
+name = "year-2024_day-21"
+path = "src/bin/day-21.rs"
+
+[[bin]]
+name = "year-2024_day-22"
+path = "src/bin/day-22.rs"
+
+[[bin]]
+name = "year-2024_day-23"
+path = "src/bin/day-23.rs"
+
+[[bin]]
+name = "year-2024_day-24"
+path = "src/bin/day-24.rs"
+
+[[bin]]
+name = "year-2024_day-25"
+path = "src/bin/day-25.rs"

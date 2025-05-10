@@ -9,11 +9,13 @@ use std::{fmt::Debug, time::Duration};
 pub use input::*;
 use internal::{CollectedData, COLLECTED_DATA};
 pub use math::*;
+pub use str_trait::*;
 
 pub mod input;
 pub mod internal;
 pub mod math;
 pub mod num_traits;
+pub mod str_trait;
 
 #[macro_export]
 macro_rules! runner {

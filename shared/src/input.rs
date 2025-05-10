@@ -32,6 +32,16 @@ pub struct Input<T> {
     pub(crate) real: T,
 }
 
+impl<T> Input<T> {
+    pub fn modify<O, F: Fn(T) -> O>(self, func: F) -> Input<O> {
+        Input {
+            sample_part1: func(self.sample_part1),
+            sample_part2: self.sample_part2.map(&func),
+            real: func(self.real),
+        }
+    }
+}
+
 pub(crate) fn year_bin_name() -> (String, String) {
     if is_running_as_single() {
         let exe = env::current_exe().unwrap();
